@@ -1,0 +1,11 @@
+double rotate_Y[3][3] = {{1, 0, 0},
+					  {0, cos(angle), -1*sin(angle)},
+					  {0, sin(angle), cos(angle)}};
+					  
+double rotate_X[3][3] = {{cos(angle), 0,sin(angle)},
+					  {0, 1, 0},
+					  {-1*sin(angle), 0, cos(angle)}};
+					  
+double rotate_Z[3][3] = {{1, 0, 0},
+					  	{0, cos(angle), -1*sin(angle)},
+					  	{0, sin(angle), cos(angle)}};
