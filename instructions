@@ -1,3 +1,0 @@
-gcc `sdl2-config --libs --cflags`-Wall -o cube main.c spin.c rendering.c -lm
-
-up, space, and all other keys for different types of rotations

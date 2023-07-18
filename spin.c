@@ -9,22 +9,50 @@
 void flatten(cube_f *cube);
 void translate(cube_f *cube);
 
-
-void spinX(cube_f *cube){
+void spin(cube_f *cube, enum rotation_t rotation){
 	for(int i = 0;i < 8; i++){
 		for(int j = 0; j < 3; j++){
 			cube->threeD_lines_rep[i][j] = 0.0;
 		}
 	}
 
-	double rotate_X[3][3] = {{cos(cube->theta_d), 0,sin(cube->theta_d)},
-						  {0, 1, 0},
-						  {-1*sin(cube->theta_d), 0, cos(cube->theta_d)}};
+    double rotation_matrix[6][3][3] = {
+        {
+            {COS_T, 0,N_SIN},
+            {0, 1, 0},
+			{SIN_T, 0, COS_T}
+        },
+        {
+            {COS_T, 0,SIN_T},
+            {0, 1, 0},
+			{N_SIN, 0, COS_T}
+        },
+        {
+            {COS_T, N_SIN, 0},
+            {SIN_T, COS_T, 0},
+            {0, 0, 1},
+        },
+        {
+            {COS_T, SIN_T, 0},
+            {N_SIN, COS_T, 0},
+            {0, 0, 1},
+        },
+        {
+            {1, 0, 0},
+            {0, COS_T, N_SIN},
+            {0, SIN_T, COS_T}
+        },
+        {
+            {1, 0, 0},
+            {0, COS_T, SIN_T},
+            {0, N_SIN, COS_T}
+        },
+    };
 
 	for(int i = 0; i < LINE_NUM; i++){
 		for(int j = 0; j < 3; j++){
 			for(int k = 0; k < 3; k++){
-				cube->threeD_lines_rep[i][j] += cube->threeD_lines[i][k] * rotate_X[k][j];  
+				cube->threeD_lines_rep[i][j] += cube->threeD_lines[i][k] * rotation_matrix[rotation][2-j][2-k];
 			}
 		}
 	}
@@ -33,64 +61,8 @@ void spinX(cube_f *cube){
 		for(int j = 0; j < 3; j++){
 			cube->threeD_lines[i][j] = cube->threeD_lines_rep[i][j];
 		}
-	}
-//*/
- 	flatten(cube);
-}
-void spinY(cube_f *cube){
-	for(int i = 0;i < 8; i++){
-		for(int j = 0; j < 3; j++){
-			cube->threeD_lines_rep[i][j] = 0.0;
-		}
-	}
+    }
 
-	double rotate_Y[3][3] = {{1, 0, 0},
-					  {0, cos(cube->theta_d), -1*sin(cube->theta_d)},
-					  {0, sin(cube->theta_d), cos(cube->theta_d)}};
-
-	for(int i = 0; i < LINE_NUM; i++){
-		for(int j = 0; j < 3; j++){
-			for(int k = 0; k < 3; k++){
-				cube->threeD_lines_rep[i][j] += cube->threeD_lines[i][k] * rotate_Y[k][j];  
-			}
-		}
-	}
-	
-	for(int i = 0;i < 8; i++){
-		for(int j = 0; j < 3; j++){
-			cube->threeD_lines[i][j] = cube->threeD_lines_rep[i][j];
-		}
-	}
-//*/
- 	flatten(cube);
-}
-
-void spinZ(cube_f *cube){
-	for(int i = 0;i < 8; i++){
-		for(int j = 0; j < 3; j++){
-			cube->threeD_lines_rep[i][j] = 0.0;
-		}
-	}
-
-	double rotate_Z[3][3] = {{cos(cube->theta_d), sin(cube->theta_d), 0},
-					  	{ -1*sin(cube->theta_d), cos(cube->theta_d),0},
-					  	{0, 0, 1}};
-
-
-	for(int i = 0; i < LINE_NUM; i++){
-		for(int j = 0; j < 3; j++){
-			for(int k = 0; k < 3; k++){
-				cube->threeD_lines_rep[i][j] += cube->threeD_lines[i][k] * rotate_Z[k][j];  
-			}
-		}
-	}
-	
-	for(int i = 0;i < 8; i++){
-		for(int j = 0; j < 3; j++){
-			cube->threeD_lines[i][j] = cube->threeD_lines_rep[i][j];
-		}
-	}
-//*/
  	flatten(cube);
 }
 
@@ -103,13 +75,12 @@ void flatten(cube_f *cube){
 
 	for(int i = 0; i < LINE_NUM; i++){
 		double z_divizor;
-		if(cube->threeD_lines[i][Z_AXIS] < 0){
-			z_divizor = (cube->threeD_lines[i][Z_AXIS]+ DISTANCE)/2;
+		if(cube->threeD_lines[i][Z_AXIS] == 0){
+            z_divizor = DISTANCE/2.0;
 		}
-		else if(cube->threeD_lines[i][Z_AXIS] > 0){
+		else{
 			z_divizor = (cube->threeD_lines[i][Z_AXIS] + DISTANCE)/2;
 		}
-		else {z_divizor = DISTANCE/2.0;}
 
 		printf("\nzdivizors %lf\n", z_divizor);
 		cube->flat_lines[i][X_AXIS] = (cube->threeD_lines[i][X_AXIS] / z_divizor);
@@ -120,9 +91,7 @@ void flatten(cube_f *cube){
 	}
 	for(int i = 0; i < 8; i++){
 		printf("\n3D: [%lf, %lf, %lf]", cube->threeD_lines[i][X_AXIS], cube->threeD_lines[i][Y_AXIS], cube->threeD_lines[i][Z_AXIS]);
-	//	printf("flat: %lf, %lf\n", cube->flat_lines[i][X_AXIS], cube->flat_lines[i][Y_AXIS]);
-	//	printf("drawn: %d, %d\n", cube->drawn_lines[i][X_AXIS], cube->drawn_lines[i][Y_AXIS]);
-	}//*/
+	}
 	printf("\n");
 }
 

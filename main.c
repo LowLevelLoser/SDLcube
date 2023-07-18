@@ -47,7 +47,8 @@ int main(int arc, char *argv[]){
 						 {-1,1,1},
 						 {-1,1,-1},
 						 {-1,-1,1},
-						 {-1,-1,-1}},//*/ 
+						 {-1,-1,-1}},
+
 		.threeD_lines_rep = {{0,0,0},
 							{0,0,0},
 							{0,0,0},
@@ -56,8 +57,6 @@ int main(int arc, char *argv[]){
 							{0,0,0},
 							{0,0,0},
 							{0,0,0}},
-		.theta_b = 0,
-		.theta_d = PI_M/36
 	};
 
 	
@@ -70,18 +69,26 @@ int main(int arc, char *argv[]){
 					quit = 0;
 					break;
 			case SDL_KEYDOWN:
-				if(e.key.keysym.sym == SDLK_UP){
-					spinY(&cube);
-				}
-				else if(e.key.keysym.sym == SDLK_SPACE){
-					spinZ(&cube);
-				}
-				else{
-					spinX(&cube);
-				}
-				break;
-
-				default: {}
+                switch(e.key.keysym.sym){
+                    case SDLK_RIGHT:
+                        spin(&cube, YAW_R);
+                        break;
+                    case SDLK_LEFT:
+                        spin(&cube, YAW_L);
+                        break;
+                    case SDLK_UP:
+                        spin(&cube, PITCH_U);
+                        break;
+                    case SDLK_DOWN:
+                        spin(&cube, PITCH_D);
+                        break;
+                    case SDLK_d:
+                        spin(&cube, ROLL_R);
+                        break;
+                    case SDLK_a:
+                        spin(&cube, ROLL_L);
+                        break;
+                }
 			}
 		}
 		SDL_SetRenderDrawColor(renderer, 0/*R*/, 0/*G*/, 0/*B*/, 255); //makes the background black
