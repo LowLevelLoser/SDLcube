@@ -10,7 +10,7 @@
 #define CENTER_Y SCREEN_HEIGHT/2.0
 #define LINE_NUM 8
 #define PIXEL_LENGTH 600
-#define DISTANCE 2
+#define DISTANCE 6
 
 #define X_AXIS 0
 #define Y_AXIS 1
